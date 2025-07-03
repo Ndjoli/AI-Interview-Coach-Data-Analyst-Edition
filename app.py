@@ -1,17 +1,18 @@
+
 import streamlit as st
 import json
 import openai
 from fpdf import FPDF
 
-# ✅ Page Config
+# ✅ Page config
 st.set_page_config(
     page_title="AI Interview Coach",
     page_icon="🎤",
     layout="centered"
 )
 
-# 🔐 Set OpenAI API key from Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# 🔐 Set OpenAI API key securely
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # ✅ Persona prompt templates
 persona_prompts = {
@@ -48,7 +49,7 @@ question = question_list[index]
 st.subheader(f"Question {index + 1} of {len(question_list)}")
 st.write(question)
 
-# ✅ Text area
+# ✅ Input area
 st.session_state.user_input = st.text_area("Your Answer", value=st.session_state.user_input, height=200)
 
 if st.button("Submit Answer"):
@@ -61,12 +62,12 @@ if st.button("Submit Answer"):
             {"role": "user", "content": f"Answer: {st.session_state.user_input}"}
         ]
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=messages,
                 temperature=0.7
             )
-            reply = response.choices[0].message["content"]
+            reply = response.choices[0].message.content
             st.success(reply)
             st.session_state.responses.append((question, st.session_state.user_input, reply))
         except Exception as e:
@@ -88,7 +89,7 @@ if st.session_state.responses:
         st.sidebar.markdown(f"- **AI Feedback:** {r}")
         st.sidebar.markdown("---")
 
-# ✅ Show PDF button after final question
+# ✅ Download PDF
 if st.session_state.question_index + 1 == len(question_list):
     if st.button("📥 Download PDF Summary"):
 
