@@ -19,9 +19,13 @@ Whether you're preparing for your first job or brushing up your communication sk
 
 ---
 
+![App Preview](assets/app-screenshot.png)
+
+---
+
 ## 🧠 Key Features
 
-- 🎯 **5 Curated Behavioral Interview Questions** focused on common scenarios for data analysts
+- 🎯 **5 Curated Behavioral Interview Questions** focused on common scenarios for data analysts  
 - 🧑‍🏫 **AI Persona Selector** with 4 distinct review styles:
   - `Professional Coach`: Encouraging, structured feedback using STAR method
   - `Mentor`: Supportive and constructive suggestions
@@ -30,8 +34,8 @@ Whether you're preparing for your first job or brushing up your communication sk
 - 💬 **Live AI Feedback** using OpenAI's `gpt-3.5-turbo` model
 - 📝 **Progress Tracker** to show which question you’re on
 - 📄 **PDF Summary Generator** at the end of the interview — includes:
-  - All questions
-  - Your answers
+  - All questions  
+  - Your answers  
   - The AI’s detailed feedback
 
 ---
@@ -55,7 +59,7 @@ Whether you're preparing for your first job or brushing up your communication sk
 - Stored questions in a structured JSON file
 
 ### Phase 2: UI Development with Streamlit  
-- Built a user-friendly interface using `streamlit`
+- Built a user-friendly interface using `streamlit`  
 - Implemented question display, persona selector, text input, and feedback display
 
 ### Phase 3: OpenAI API Integration  
@@ -64,21 +68,13 @@ Whether you're preparing for your first job or brushing up your communication sk
 - Added error handling and user prompts
 
 ### Phase 4: PDF Summary Generator  
-- Built a custom PDF report using `fpdf`
+- Built a custom PDF report using `fpdf`  
 - Added a download button that appears only after completing all questions  
 - The PDF includes: all questions, user responses, and the AI’s feedback
 
 ### Phase 5: Cloud Deployment  
 - Deployed the app publicly on [Streamlit Cloud](https://streamlit.io/cloud)  
 - Secured API keys using `.streamlit/secrets.toml`
-
----
-
-## 🖼 Screenshot
-
-![App Screenshot](assets/app-screenshot.png)
-
----
 
 ---
 
