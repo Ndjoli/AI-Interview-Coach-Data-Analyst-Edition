@@ -1,15 +1,16 @@
 import streamlit as st
 import json
-import openai
 import os
 from dotenv import load_dotenv
+import openai
 from fpdf import FPDF
 
-# 🔐 Load environment variables (for local use)
+# ✅ Load .env file
 load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 
-# 🔑 Securely set your API key from environment
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# ✅ Initialize OpenAI client
+client = openai.OpenAI(api_key=api_key)
 
 # ✅ Persona prompt templates
 persona_prompts = {
@@ -47,10 +48,10 @@ question = question_list[index]
 st.subheader(f"Question {index + 1} of {len(question_list)}")
 st.write(question)
 
-# ✅ Input area
+# ✅ Answer box
 st.session_state.user_input = st.text_area("Your Answer", value=st.session_state.user_input, height=200)
 
-# ✅ Submit Answer
+# ✅ Submit button
 if st.button("Submit Answer"):
     if st.session_state.user_input.strip() == "":
         st.warning("Please write your answer before submitting.")
@@ -72,7 +73,7 @@ if st.button("Submit Answer"):
         except Exception as e:
             st.error(f"Error: {e}")
 
-# ✅ Move to next question
+# ✅ Next button
 if st.button("Next Question"):
     if index + 1 < len(question_list):
         st.session_state.question_index += 1
@@ -80,7 +81,7 @@ if st.button("Next Question"):
     else:
         st.success("🎉 You’ve completed all questions!")
 
-# ✅ Sidebar Summary
+# ✅ Sidebar summary
 if st.session_state.responses:
     st.sidebar.title("📋 Review Summary")
     for i, (q, a, r) in enumerate(st.session_state.responses):
@@ -89,7 +90,7 @@ if st.session_state.responses:
         st.sidebar.markdown(f"- **AI Feedback:** {r}")
         st.sidebar.markdown("---")
 
-# ✅ PDF Button only after final question
+# ✅ Show PDF button after final question
 if st.session_state.question_index + 1 == len(question_list):
     if st.button("📥 Download PDF Summary"):
 
