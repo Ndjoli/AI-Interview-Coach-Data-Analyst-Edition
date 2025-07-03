@@ -1,16 +1,17 @@
 import streamlit as st
 import json
-import os
-from dotenv import load_dotenv
 import openai
 from fpdf import FPDF
 
-# ✅ Load .env file
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+# ✅ Page Config
+st.set_page_config(
+    page_title="AI Interview Coach",
+    page_icon="🎤",
+    layout="centered"
+)
 
-# ✅ Initialize OpenAI client
-client = openai.OpenAI(api_key=api_key)
+# 🔐 Set OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ✅ Persona prompt templates
 persona_prompts = {
@@ -26,7 +27,6 @@ with open("prompts/question_bank.json", "r") as f:
 question_list = question_data["data_analyst"]
 
 # ✅ Streamlit UI
-st.set_page_config(page_title="AI Interview Coach")
 st.title("🎤 AI Interview Coach – Data Analyst Edition")
 st.markdown("Practice behavioral interview questions and receive AI feedback using the STAR method.")
 
@@ -48,10 +48,9 @@ question = question_list[index]
 st.subheader(f"Question {index + 1} of {len(question_list)}")
 st.write(question)
 
-# ✅ Answer box
+# ✅ Text area
 st.session_state.user_input = st.text_area("Your Answer", value=st.session_state.user_input, height=200)
 
-# ✅ Submit button
 if st.button("Submit Answer"):
     if st.session_state.user_input.strip() == "":
         st.warning("Please write your answer before submitting.")
@@ -62,18 +61,17 @@ if st.button("Submit Answer"):
             {"role": "user", "content": f"Answer: {st.session_state.user_input}"}
         ]
         try:
-            response = client.chat.completions.create(
+            response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=messages,
                 temperature=0.7
             )
-            reply = response.choices[0].message.content
+            reply = response.choices[0].message["content"]
             st.success(reply)
             st.session_state.responses.append((question, st.session_state.user_input, reply))
         except Exception as e:
             st.error(f"Error: {e}")
 
-# ✅ Next button
 if st.button("Next Question"):
     if index + 1 < len(question_list):
         st.session_state.question_index += 1
@@ -81,7 +79,7 @@ if st.button("Next Question"):
     else:
         st.success("🎉 You’ve completed all questions!")
 
-# ✅ Sidebar summary
+# ✅ Sidebar Summary
 if st.session_state.responses:
     st.sidebar.title("📋 Review Summary")
     for i, (q, a, r) in enumerate(st.session_state.responses):
@@ -116,3 +114,7 @@ if st.session_state.question_index + 1 == len(question_list):
 
         with open(pdf_file, "rb") as f:
             st.download_button("⬇️ Download PDF", f, file_name=pdf_file)
+
+# ✅ Footer
+st.markdown("---")
+st.caption("Built with 💬 by Iloyeka Arman Ndjoli | [GitHub](https://github.com/Ndjoli) | [LinkedIn](https://www.linkedin.com/in/arman-ndjoli97)")
