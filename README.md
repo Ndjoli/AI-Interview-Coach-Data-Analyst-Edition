@@ -19,7 +19,7 @@ Whether you're preparing for your first job or brushing up your communication sk
 
 ---
 
-![App Preview](assets/app-screenshot.png)
+![App Preview](app-screenshot.png)
 
 ---
 
